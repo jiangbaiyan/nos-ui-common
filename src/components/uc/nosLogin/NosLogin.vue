@@ -43,16 +43,16 @@
         this.$axios.post('http://152.136.125.67/unifed/login', this.params).then(response => {
           if (response.data.status === 200) {
             this.$alert('登录成功', '提示');
-            this.resetDialog();
+            this.resetDialog(response.data);
           } else {
             this.$alert('登录失败', '提示');
-            this.resetDialog();
+            this.resetDialog(response.data);
           }
         });
       },
-      resetDialog() {
+      resetDialog(data) {
         this.dialogVisible = false;
-        this.$emit('loginFinish');
+        this.$emit('loginFinish', data);
       }
     },
     data() {
