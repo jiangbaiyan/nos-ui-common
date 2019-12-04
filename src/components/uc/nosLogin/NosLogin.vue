@@ -52,7 +52,7 @@
       },
       resetDialog() {
         this.dialogVisible = false;
-        this.$emit('loginSuccess');
+        this.$emit('loginFinish');
       }
     },
     data() {

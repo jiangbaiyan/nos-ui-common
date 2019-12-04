@@ -19,5 +19,6 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 export default {
   install,
-  components
+  NosLogin,
+  NosRegister
 }
