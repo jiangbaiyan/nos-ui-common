@@ -4,7 +4,7 @@
     :visible.sync="dialogVisible"
     :before-close="resetDialog"
     width="30%">
-    <el-form :model="form" :rules="rules" status-icon>
+    <el-form :model="form" :rules="rules" ref="form" status-icon>
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="form.email"></el-input>
       </el-form-item>
