@@ -14,7 +14,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
     <el-button @click="resetDialog">取消</el-button>
-    <el-button type="primary" @click="onSubmit">登录</el-button></span>
+    <el-button type="primary" @click="submit('form')">登录</el-button></span>
   </el-dialog>
 </template>
 
@@ -38,15 +38,23 @@
       }
     },
     methods: {
-      onSubmit() {
-        Object.assign(this.params, this.form);
-        this.$axios.post('http://152.136.125.67:9600/unified/login', this.params).then(response => {
-          if (response.data.status === 200) {
-            this.$alert('登录成功', '提示');
-            this.resetDialog(response.data);
+      submit(formName) {
+        // 表单验证
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            Object.assign(this.params, this.form);
+            this.$axios.post('http://152.136.125.67:9600/unified/login', this.params).then(response => {
+              if (response.data.status === 200) {
+                this.$message.success('登录成功', '成功');
+                this.resetDialog(response.data);
+              } else {
+                this.$message.error('登录失败', '错误');
+                this.resetDialog(response.data);
+              }
+            });
           } else {
-            this.$alert('登录失败', '提示');
-            this.resetDialog(response.data);
+            this.$message.error('您的信息填写不正确', '错误');
+            return false;
           }
         });
       },
