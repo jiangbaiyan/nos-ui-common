@@ -40,7 +40,7 @@
     methods: {
       onSubmit() {
         Object.assign(this.params, this.form);
-        this.$axios.post('http://152.136.125.67/unifed/login', this.params).then(response => {
+        this.$axios.post('http://152.136.125.67:9600/unified/login', this.params).then(response => {
           if (response.data.status === 200) {
             this.$alert('登录成功', '提示');
             this.resetDialog(response.data);
@@ -50,7 +50,7 @@
           }
         });
       },
-      resetDialog(data) {
+      resetDialog(data = '') {
         this.dialogVisible = false;
         this.$emit('loginFinish', data);
       }
