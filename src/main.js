@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Login from "./components/uc/NosLogin";
+import Login from "./components/uc/nosLogin/NosLogin";
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
