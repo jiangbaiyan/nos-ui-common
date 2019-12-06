@@ -21,22 +21,7 @@
 <script>
   export default {
     name: 'NosLogin',
-    props: {
-      // 对话框展示与否
-      dialogVisible: {
-        type: Boolean,
-        default() {
-          return true;
-        }
-      },
-      // 其他请求参数
-      params: {
-        type: Object,
-        default() {
-          return {}
-        }
-      }
-    },
+    props: ['dialogVisible', 'params'],
     methods: {
       submit(formName) {
         // 表单验证
