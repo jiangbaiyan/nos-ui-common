@@ -45,15 +45,15 @@
             Object.assign(this.params, this.form);
             this.$axios.post('http://152.136.125.67:9600/unified/login', this.params).then(response => {
               if (response.data.status === 200) {
-                this.$message.success('登录成功', '成功');
+                this.$message.success('登录成功');
                 this.resetDialog(response.data);
               } else {
-                this.$message.error('登录失败', '错误');
+                this.$message.error('登录失败');
                 this.resetDialog(response.data);
               }
             });
           } else {
-            this.$message.error('您的信息填写不正确', '错误');
+            this.$message.error('您的信息填写不正确');
             return false;
           }
         });
