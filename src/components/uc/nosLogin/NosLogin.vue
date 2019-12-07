@@ -28,7 +28,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             Object.assign(this.params, this.form);
-            this.$axios.post('http://152.136.125.67:9600/unified/login', this.params).then(response => {
+            this.$axios.post('/v1/unified/login', this.params).then(response => {
               if (response.data.status === 200) {
                 this.$message.success('登录成功');
                 this.resetDialog(response.data);
