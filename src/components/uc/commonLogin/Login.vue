@@ -43,7 +43,6 @@
 </template>
 
 <script>
-    import {login,register} from '@/api/getData'
 
     export default {
         name: 'Login',
@@ -75,8 +74,6 @@
             if (token) {
                 this.loginWithTolen(token);
             }
-        },
-        computed: {
         },
         methods: {
             async submitForm(formName) {
@@ -110,7 +107,6 @@
             },
             reigsterPage() {
                 this.displayDialog = true;
-
             },
             async reigsterForm(formName) {
                 this.$refs[formName].validate(async (valid) => {
@@ -154,9 +150,6 @@
                 }
             }
         },
-
-        watch: {
-        }
     }
 </script>
 
