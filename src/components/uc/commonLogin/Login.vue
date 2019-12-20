@@ -1,7 +1,7 @@
 <template>
     <div class="login_page fillcontain">
         <transition name="form-fade" mode="in-out">
-            <section class="form_contianer" v-show="showLogin">
+            <section class="form_container" v-show="showLogin">
                 <div class="manage_tip">
                     <p>{{title}}</p>
                 </div>
@@ -16,7 +16,7 @@
                         <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登录</el-button>
                     </el-form-item>
                 </el-form>
-                <el-button type="primary" @click="reigsterPage" class="submit_btn">注册</el-button>
+                <el-button type="primary" @click="registerPage" class="submit_btn">注册</el-button>
                 <p class="tip">温馨提示：</p>
                 <p class="tip">未登录过的新用户，请先点击下方注册按钮进行注册</p>
                 <p class="tip">注册过之后请去邮箱激活</p>
@@ -35,7 +35,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="displayDialog = false">取 消</el-button>
-                    <el-button type="primary" @click="reigsterForm('registerForm')">确 定</el-button>
+                    <el-button type="primary" @click="registerForm('registerForm')">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -43,7 +43,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
     export default {
         name: 'Login',
         props: ['url','title','registerUrl'],
@@ -72,7 +71,7 @@
         },
         created() {
             this.showLogin = true;
-            var token = this.$cookies.get('unified_token');
+            let token = this.$cookies.get('unified_token');
             if (token) {
                 this.loginWithTolen(token);
             }
@@ -82,8 +81,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let data = {"email": this.loginForm.email, "password": this.loginForm.password};
-                        const res = axios.post(this.url, data).then(res => {
-                            console.log(res)
+                        this.$axios.post(this.url, data).then(res => {
                             if (res.data.status === 200) {
                                 this.$message({
                                     type: 'success',
@@ -110,14 +108,14 @@
                     }
                 });
             },
-            reigsterPage() {
+            registerPage() {
                 this.displayDialog = true;
             },
-            reigsterForm(formName) {
+            registerForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let data = {"email": this.registerForm.email, "password": this.registerForm.password};
-                        const res = axios.post(this.registerUrl, data).then(res => {
+                        this.$axios.post(this.registerUrl, data).then(res => {
                             if (res.data.status === 200) {
                                 this.$message({
                                     type: 'success',
@@ -143,7 +141,7 @@
             },
             loginWithTolen(token) {
                 let data = {"unified_token": token};
-                const res = axios.post(this.url, data).then(res => {
+                this.$axios.post(this.url, data).then(res => {
                     if (res.data.status === 200) {
                         this.$message({
                             type: 'success',
@@ -180,7 +178,7 @@
             color: #000000;
         }
     }
-    .form_contianer{
+    .form_container{
         .wh(320px, 210px);
         .ctp(320px, 210px);
         padding: 25px;
