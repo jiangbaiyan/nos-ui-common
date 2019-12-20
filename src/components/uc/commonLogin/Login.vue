@@ -3,11 +3,11 @@
         <transition name="form-fade" mode="in-out">
             <section class="form_contianer" v-show="showLogin">
                 <div class="manage_tip">
-                    <p>Nmp管理系统</p>
+                    <p>{{title}}</p>
                 </div>
-                <el-form :model="loginForm" ref="loginForm">
+                <el-form :model="loginForm" :rules="rules" ref="loginForm">
                     <el-form-item prop="email">
-                        <el-input v-model="loginForm.email" placeholder="用户名"></el-input>
+                        <el-input v-model="loginForm.email" placeholder="邮箱"></el-input>
                     </el-form-item>
                     <el-form-item prop="password">
                         <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
@@ -24,7 +24,7 @@
             </section>
         </transition>
         <div>
-            <el-dialog title="注册" :visible.sync=displayDialog>
+            <el-dialog title="注册" :rules="rules" :visible.sync=displayDialog>
                 <el-form :model="registerForm" ref="registerForm">
                     <el-form-item label="email" prop="email" label-width="100px">
                         <el-input v-model="registerForm.email" auto-complete="off"></el-input>
@@ -43,10 +43,11 @@
 </template>
 
 <script>
-
+    import axios from 'axios';
     export default {
         name: 'Login',
-        data(){
+        props: ['url','title','registerUrl'],
+        data() {
             return {
                 loginForm: {
                     email: '',
@@ -58,17 +59,18 @@
                 },
                 rules: {
                     email: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' },
+                        {required: true, message: '请输入用户名', trigger: 'blur'},
                     ],
                     password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
+                        {required: true, message: '请输入密码', trigger: 'blur'}
                     ],
                 },
                 showLogin: false,
                 displayDialog: false,
+                title: this.title
             }
         },
-        created(){
+        created() {
             this.showLogin = true;
             var token = this.$cookies.get('unified_token');
             if (token) {
@@ -76,25 +78,28 @@
             }
         },
         methods: {
-            async submitForm(formName) {
-                this.$refs[formName].validate(async (valid) => {
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        const res = this.$axios.post('/v1/unified/login', {email: this.loginForm.email, password: this.loginForm.password});
-                        if (res.status == 200) {
-                            this.$message({
-                                type: 'success',
-                                message: '登录成功'
-                            });
-                            if (res.data.unified_token) {
-                                this.$cookies.set('unified_token', res.data.unified_token)
+                        let data = {"email": this.loginForm.email, "password": this.loginForm.password};
+                        const res = axios.post(this.url, data).then(res => {
+                            console.log(res)
+                            if (res.data.status === 200) {
+                                this.$message({
+                                    type: 'success',
+                                    message: '登录成功'
+                                });
+                                if (res.data.unified_token) {
+                                    this.$cookies.set('unified_token', res.data.unified_token)
+                                }
+                                this.returnData(res.data);
+                            } else {
+                                this.$message({
+                                    type: 'error',
+                                    message: res.data.msg
+                                });
                             }
-                            this.$router.push('/').catch(err => {})
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: res.message
-                            });
-                        }
+                        })
                     } else {
                         this.$notify.error({
                             title: '错误',
@@ -108,22 +113,24 @@
             reigsterPage() {
                 this.displayDialog = true;
             },
-            async reigsterForm(formName) {
-                this.$refs[formName].validate(async (valid) => {
+            reigsterForm(formName) {
+                this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        const res = this.$axios.post('/v1/unified/login', {email: this.registerForm.email, password: this.registerForm.password});
-                        if (res.status == 200) {
-                            this.$message({
-                                type: 'success',
-                                message: '注册成功'
-                            });
-                            this.$router.push('login').catch(err => {});
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: res.msg
-                            });
-                        }
+                        let data = {"email": this.registerForm.email, "password": this.registerForm.password};
+                        const res = axios.post(this.registerUrl, data).then(res => {
+                            if (res.data.status === 200) {
+                                this.$message({
+                                    type: 'success',
+                                    message: '注册成功'
+                                });
+                                this.returnData(res.data);
+                            } else {
+                                this.$message({
+                                    type: 'error',
+                                    message: res.data.msg
+                                });
+                            }
+                        })
                     } else {
                         this.$notify.error({
                             title: '错误',
@@ -134,22 +141,27 @@
                     }
                 });
             },
-            async loginWithTolen(token) {
-                const res = this.$axios.post('/v1/unified/login', {unified_token:token});
-                if (res.status == 200) {
-                    this.$message({
-                        type: 'success',
-                        message: '登录成功'
-                    });
-                    this.$router.push('/').catch(err => {});
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.message
-                    });
-                }
+            loginWithTolen(token) {
+                let data = {"unified_token": token};
+                const res = axios.post(this.url, data).then(res => {
+                    if (res.data.status === 200) {
+                        this.$message({
+                            type: 'success',
+                            message: '登录成功'
+                        });
+                        this.returnData(res.data);
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: res.data.msg
+                        });
+                    }
+                })
+            },
+            returnData(data = '') {
+                this.$emit('login-finish', data);
             }
-        },
+        }
     }
 </script>
 
