@@ -35,7 +35,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="displayDialog = false">取 消</el-button>
-                    <el-button type="primary" @click="registerForm('registerForm')">确 定</el-button>
+                    <el-button type="primary" @click="register('registerForm')">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     export default {
         name: 'Login',
         props: ['url','title','registerUrl'],
@@ -81,7 +82,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let data = {"email": this.loginForm.email, "password": this.loginForm.password};
-                        this.$axios.post(this.url, data).then(res => {
+                        axios.post(this.url, data).then(res => {
                             if (res.data.status === 200) {
                                 this.$message({
                                     type: 'success',
@@ -111,11 +112,11 @@
             registerPage() {
                 this.displayDialog = true;
             },
-            registerForm(formName) {
+            register(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let data = {"email": this.registerForm.email, "password": this.registerForm.password};
-                        this.$axios.post(this.registerUrl, data).then(res => {
+                        axios.post(this.registerUrl, data).then(res => {
                             if (res.data.status === 200) {
                                 this.$message({
                                     type: 'success',
@@ -141,7 +142,7 @@
             },
             loginWithTolen(token) {
                 let data = {"unified_token": token};
-                this.$axios.post(this.url, data).then(res => {
+                axios.post(this.url, data).then(res => {
                     if (res.data.status === 200) {
                         this.$message({
                             type: 'success',
