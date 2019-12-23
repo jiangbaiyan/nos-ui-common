@@ -42,7 +42,7 @@
     import axios from 'axios';
     export default {
         name: 'NosRegLogin',
-        props: ['loginUrl', 'registerUrl'],
+        props: ['login-url', 'register-url'],
         data() {
             return {
                 loginForm: {
