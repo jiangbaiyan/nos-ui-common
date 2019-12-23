@@ -1,11 +1,7 @@
-import NosLogin from './components/uc/nosLogin/index.js';
-import NosRegister from './components/uc/nosRegister/index.js';
-import Login from "./components/uc/commonLogin/index.js";
+import NosRegLogin from "./components/uc/nosRegLogin/NosRegLogin";
 
 const components = [
-  NosLogin,
-  NosRegister,
-    Login
+  NosRegLogin
 ];
 
 const install = function(Vue, opts = {}) {
@@ -21,7 +17,5 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 export default {
   install,
-  NosLogin,
-  NosRegister,
-  Login
+  NosRegLogin
 }
