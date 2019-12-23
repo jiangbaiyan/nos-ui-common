@@ -25,8 +25,8 @@
                     <el-form-item label="邮箱" prop="email" required>
                         <el-input v-model="registerForm.email" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" prop="password" show-password required>
-                        <el-input v-model="registerForm.password"></el-input>
+                    <el-form-item label="密码" prop="password" required>
+                        <el-input v-model="registerForm.password" show-password></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -42,7 +42,7 @@
     import axios from 'axios';
     export default {
         name: 'NosRegLogin',
-        props: ['login-url', 'register-url'],
+        props: ['loginUrl', 'registerUrl', 'params'],
         data() {
             return {
                 loginForm: {
@@ -76,11 +76,11 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let data = {
-                          email: this.loginForm.email,
-                          password: this.loginForm.password
-                        };
-                        axios.post(this.url, data).then(res => {
+                        Object.assign(this.params, {
+                            email: this.loginForm.email,
+                            password: this.loginForm.password
+                        });
+                        axios.post(this.loginUrl, this.params).then(res => {
                             if (res.data.status === 200) {
                                 this.$message({
                                     type: 'success',
@@ -113,8 +113,11 @@
             register(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let data = {"email": this.registerForm.email, "password": this.registerForm.password};
-                        axios.post(this.registerUrl, data).then(res => {
+                        Object.assign(this.params, {
+                            email: this.registerForm.email,
+                            password: this.registerForm.password
+                        });
+                        axios.post(this.registerUrl, this.params).then(res => {
                             if (res.data.status === 200) {
                                 this.$message({
                                     type: 'success',
@@ -139,8 +142,10 @@
                 });
             },
             loginWithToken(token) {
-                let data = {"unified_token": token};
-                axios.post(this.url, data).then(res => {
+                Object.assign(this.params, {
+                    unified_token: token
+                });
+                axios.post(this.loginUrl, this.params).then(res => {
                     if (res.data.status === 200) {
                         this.$message({
                             type: 'success',
