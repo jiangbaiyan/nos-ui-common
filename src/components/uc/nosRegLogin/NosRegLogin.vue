@@ -42,7 +42,24 @@
     import axios from 'axios';
     export default {
         name: 'NosRegLogin',
-        props: ['loginUrl', 'registerUrl', 'unified_token', 'params'],
+        props: {
+            loginUrl: {
+                type: String,
+                required: true
+            },
+            registerUrl: {
+                type: String,
+                required: true
+            },
+            params: {
+                type: Object,
+                default: {}
+            },
+            unified_token: {
+                type: String,
+                required: true
+            }
+        },
         data() {
             return {
                 loginForm: {
@@ -66,9 +83,6 @@
             }
         },
         mounted() {
-            if (this.params === undefined || this.params === null) {
-                this.params = {};
-            }
             this.showLogin = true;
             let token = this.unified_token;
             if (token) {
