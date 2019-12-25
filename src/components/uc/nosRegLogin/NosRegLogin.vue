@@ -42,7 +42,24 @@
     import axios from 'axios';
     export default {
         name: 'NosRegLogin',
-        props: ['loginUrl', 'registerUrl', 'params'],
+        props: {
+            loginUrl: {
+                type: String,
+                required: true
+            },
+            registerUrl: {
+                type: String,
+                required: true
+            },
+            params: {
+                type: Object,
+                default: {}
+            },
+            unified_token: {
+                type: String,
+                required: true
+            }
+        },
         data() {
             return {
                 loginForm: {
@@ -67,7 +84,7 @@
         },
         mounted() {
             this.showLogin = true;
-            let token = this.$cookies.get('unified_token');
+            let token = this.unified_token;
             if (token) {
                 this.loginWithToken(token);
             }
@@ -86,9 +103,6 @@
                                     type: 'success',
                                     message: '登录成功'
                                 });
-                                if (res.data.unified_token) {
-                                    this.$cookies.set('unified_token', res.data.unified_token)
-                                }
                                 this.returnData(res.data);
                             } else {
                                 this.$message({
