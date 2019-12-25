@@ -86,9 +86,6 @@
                                     type: 'success',
                                     message: '登录成功'
                                 });
-                                if (res.data.unified_token) {
-                                    this.$cookies.set('unified_token', res.data.unified_token)
-                                }
                                 this.returnData(res.data);
                             } else {
                                 this.$message({
