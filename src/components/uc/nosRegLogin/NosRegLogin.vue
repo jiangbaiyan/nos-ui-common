@@ -42,7 +42,7 @@
     import axios from 'axios';
     export default {
         name: 'NosRegLogin',
-        props: ['loginUrl', 'registerUrl', 'params'],
+        props: ['loginUrl', 'registerUrl', 'unified_token', 'params'],
         data() {
             return {
                 loginForm: {
@@ -67,7 +67,7 @@
         },
         mounted() {
             this.showLogin = true;
-            let token = this.$cookies.get('unified_token');
+            let token = this.unified_token;
             if (token) {
                 this.loginWithToken(token);
             }
