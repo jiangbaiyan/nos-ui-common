@@ -66,6 +66,9 @@
             }
         },
         mounted() {
+            if (this.params === undefined || this.params === null) {
+                this.params = {};
+            }
             this.showLogin = true;
             let token = this.unified_token;
             if (token) {
